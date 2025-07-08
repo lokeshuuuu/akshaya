@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Akshaya Milk Store</title>
+
+  <!-- Correct local stylesheet using Flask's url_for -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- Correct model-viewer from CDN -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- Correct Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+  <nav>
+    <h2 class="brand">🧺 AKSHAYA Dairy Product</h2>
+    <button onclick="window.location.href='{{ url_for('payment') }}'">
+      <i class="fas fa-shopping-cart"></i>&nbsp;Cart (<span id="cart-count">0</span>)
+    </button>
+  </nav>
+
+  <div class="products">
+    <div class="product">
+      <img src="{{ url_for('static', filename='milk.jpg') }}"
+           alt="Akshaya Dairy Farm Milk Bottle"
+           style="width: 100%; height: 200px; border-radius: 10px;" />
+      <h3>Milk(1L)<br> ₹90</h3>
+      <button onclick="addToCart('Milk', '{{ url_for('static', filename='milk.jpg') }}')">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="{{ url_for('static', filename='curd.png') }}"
+           alt="Akshaya Dairy Farm Curd Bottle"
+           style="width: 100%; height: 200px; border-radius: 10px;" />
+      <h3>Curd(1L)<br> ₹70</h3>
+      <button onclick="addToCart('Curd', '{{ url_for('static', filename='curd.png') }}')">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="{{ url_for('static', filename='ghee.png') }}"
+           alt="Akshaya Dairy Farm Ghee"
+           style="width: 100%; height: 200px; border-radius: 10px;" />
+      <h3>Ghee(500g)<br> ₹500</h3>
+      <button onclick="addToCart('Ghee', '{{ url_for('static', filename='ghee.png') }}')">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="{{ url_for('static', filename='milk.jpg') }}"
+           alt="Milk Monthly Package"
+           style="width: 100%; height: 200px; border-radius: 10px;" />
+      <h3>Milk - Monthly Package</h3>
+      <p>1L/day for 30 days</p>
+      <button onclick="addToCart('Monthly Milk Package', '{{ url_for('static', filename='milk.jpg') }}')">Subscribe</button>
+    </div>
+  </div>
+
+  <div id="toast" class="hidden">Item added to cart</div>
+
+  <!-- Script must be loaded from static -->
+  <script>
+    window.onload = function () {
+      localStorage.removeItem('cart');
+      updateCartCount(); // Update cart count on page load
+    };
+  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
