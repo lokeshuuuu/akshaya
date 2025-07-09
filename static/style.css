@@ -184,3 +184,84 @@ img {
   margin-right: 10px;
   border-radius: 6px;
 }
+/* === Cart Summary Aligned Like Flipkart === */
+#price-summary {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  background: #f8f8f8;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+#price-summary p {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+#price-summary p.total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #4CAF50;
+}
+
+/* === Responsive Layout for Mobile Screens === */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .brand {
+    font-size: 1.3rem;
+  }
+
+  .products {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .product {
+    padding: 10px;
+  }
+
+  .product model-viewer {
+    height: 150px;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .customer-details,
+  .payment-section {
+    padding: 15px;
+  }
+
+  .cart-item,
+  .cart-item-payment {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cart-item img,
+  .cart-item-payment model-viewer {
+    width: 60px;
+    height: 60px;
+  }
+
+  #place-order-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
