@@ -9,7 +9,7 @@ CORS(app)  # Enable CORS
 
 # Email configuration
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'lokesh154721@gmail.com')
-SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', 'nwvp rfmq cbjm ahxf')  # Use Gmail App Password
+SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', 'honw bbzy eqxc cfin ')  # Use Gmail App Password
 RECEIVER_EMAIL = os.environ.get('RECEIVER_EMAIL', 'lokesh154721@gmail.com')
 
 @app.route('/')
@@ -77,4 +77,6 @@ def submit_order():
         return jsonify({'message': 'Failed to send order email'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
