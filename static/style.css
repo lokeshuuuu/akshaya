@@ -3,23 +3,66 @@ body {
   padding: 20px;
   background: #f9f9f9;
   margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+body.dark-mode {
+  background: #1e1e1e;
+  color: #f9f9f9;
+}
+
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f0f0f0;
+  background: rgba(240, 240, 240, 0.9); /* Slightly transparent background */
   padding: 15px 20px;
   border-radius: 10px;
-  position: sticky;
+  position: fixed; /* Changed to fixed for a true sticky effect */
   top: 0;
+  width: 100%; /* Make it span the full width */
+  box-sizing: border-box; /* Include padding in width */
   z-index: 100;
+  backdrop-filter: blur(5px); /* Add blur for glassmorphism effect */
 }
+
+body.dark-mode nav {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+body.dark-mode nav ul li a {
+  color: #f9f9f9;
+}
+
+
 
 .brand {
   font-size: 1.5rem;
   color: #007bff;
+}
+
+body.dark-mode .brand {
+  color: #90caf9;
 }
 
 .products {
@@ -37,10 +80,23 @@ nav {
   padding: 0 10px;
 }
 
-.product:hover {
-  box-shadow: 0 0 10px #aaa;
+.product {
+  background: white;
+  border-radius: 10px;
 }
 
+body.dark-mode .product {
+  background-color: rgba(40, 40, 40, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  color: #f9f9f9;
+}
+
+.product:hover {
+ transform: scale(1.03);
+ box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+ transition: 0.3s ease-in-out;
+}
 .product model-viewer {
   max-width: 100%;
   height: 200px;
@@ -70,6 +126,9 @@ img {
   border-radius: 10px;
 }
 
+/* Style for hover effect on product cards */
+}
+
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -79,6 +138,10 @@ img {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+body.dark-mode .container {
+  background: #2d2d2d;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 .customer-details,
 .payment-section {
   margin-top: 20px;
@@ -86,6 +149,11 @@ img {
   border: 1px solid #eee;
   border-radius: 8px;
   background: #f9f9f9;
+}
+
+body.dark-mode .customer-details,
+body.dark-mode .payment-section {
+  background: #3a3a3a;
 }
 
 .customer-details input,
@@ -96,6 +164,12 @@ img {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
+body.dark-mode .customer-details input,
+body.dark-mode .customer-details textarea {
+  border: 1px solid #555;
+  background: #444;
+  color: #f9f9f9;}
 
 .qr-code {
   display: block;
@@ -194,6 +268,11 @@ img {
   border-radius: 8px;
 }
 
+body.dark-mode #price-summary {
+  border-top: 1px solid #555;
+  background: #3a3a3a;
+}
+
 #price-summary p {
   display: flex;
   justify-content: space-between;
@@ -211,13 +290,31 @@ img {
 @media (max-width: 768px) {
   nav {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
   }
 
   .brand {
     font-size: 1.3rem;
   }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  nav ul li {
+    margin: 5px 0;
+  }
+
+  nav ul li a {
+    font-size: 0.9rem;
+  }
+
+
+
+
 
   .products {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -259,7 +356,8 @@ img {
     width: 60px;
     height: 60px;
   }
-x
+
+/* Existing glassmorphism styles */
   #place-order-btn {
     font-size: 14px;
     padding: 12px;

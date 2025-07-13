@@ -9,20 +9,32 @@
   <!-- Correct model-viewer from CDN -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
+  <!-- AOS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <!-- Correct Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
+<body id="home">
 
-  <nav>
-    <h2 class="brand">🧺 AKSHAYA Dairy Product</h2>
-    <button onclick="window.location.href='{{ url_for('payment') }}'">
-      <i class="fas fa-shopping-cart"></i>&nbsp;Cart (<span id="cart-count">0</span>)
-    </button>
-  </nav>
+  <header>
+    <nav>
+      <div class="logo">Akshaya</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><button onclick="window.location.href='{{ url_for('payment') }}'"><i class="fas fa-shopping-cart"></i>&nbsp;Cart (<span id="cart-count">0</span>)</button></li>
+ <li>
+ <input type="checkbox" id="dark-mode-toggle">
+ <label for="dark-mode-toggle" class="toggle-label">Toggle Dark Mode</label>
+ </li>
+      </ul>
+    </nav>
+  </header>
 
   <div class="products">
-    <div class="product">
+    <div class="product" data-aos="fade-up">
       <img src="{{ url_for('static', filename='milk.jpg') }}"
            alt="Akshaya Dairy Farm Milk Bottle"
            style="width: 100%; height: 200px; border-radius: 10px;" />
@@ -31,7 +43,7 @@
     </div>
 
     <div class="product">
-      <img src="{{ url_for('static', filename='curd.png') }}"
+      <img src="{{ url_for('static', filename='curd.png') }}" data-aos="fade-up"
            alt="Akshaya Dairy Farm Curd Bottle"
            style="width: 100%; height: 200px; border-radius: 10px;" />
       <h3>Curd(1L)<br> ₹70</h3>
@@ -39,7 +51,7 @@
     </div>
 
     <div class="product">
-      <img src="{{ url_for('static', filename='ghee.png') }}"
+      <img src="{{ url_for('static', filename='ghee.png') }}" data-aos="fade-up"
            alt="Akshaya Dairy Farm Ghee"
            style="width: 100%; height: 200px; border-radius: 10px;" />
       <h3>Ghee(500g)<br> ₹500</h3>
@@ -47,7 +59,7 @@
     </div>
 
     <div class="product">
-      <img src="{{ url_for('static', filename='milk.jpg') }}"
+      <img src="{{ url_for('static', filename='milk.jpg') }}" data-aos="fade-up"
            alt="Milk Monthly Package"
            style="width: 100%; height: 200px; border-radius: 10px;" />
       <h3>Milk - Monthly Package</h3>
@@ -66,5 +78,10 @@
     };
   </script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+  <!-- AOS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+
 </body>
 </html>

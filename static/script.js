@@ -1,6 +1,23 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Dark mode toggle functionality
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+
+  // Check for saved theme in localStorage
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    body.classList.add(savedTheme);
+  }
+
+  // Toggle theme on button click
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark-mode' : '');
+    });
+  }
   updateCartCount();
 });
 
@@ -61,3 +78,4 @@ function showToast(message) {
     toast.classList.add("hidden");
   }, 2000);
 }
+
