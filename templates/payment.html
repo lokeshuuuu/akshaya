@@ -6,6 +6,7 @@
   <title>Checkout - Akshaya Milk Store</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <style>
     .price-summary {
       border-top: 1px solid #ccc;
@@ -53,108 +54,14 @@
     </div>
 
     <div class="payment-section">
-      <h3>Scan & Pay</h3>
-      <img src="{{ url_for('static', filename='pay.jpg') }}" alt="QR Code" class="qr-code"/>
-      <p>
-        Send payment screenshot to 
-        <a href="https://wa.me/916304646043" target="_blank">WhatsApp: +91-6304646043</a>
-      </p>
-      <button id="place-order-btn">Place Order</button>
+      <h3>Payment</h3>
+      <!-- QR code and WhatsApp link removed -->
+      <button id="cashfree-pay-btn">Pay Now</button>
     </div>
   </div>
 
   <div id="toast" class="hidden"></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-      const cartList = document.getElementById('cart-items-payment');
-      const priceSummary = document.getElementById('price-summary');
-
-      if (cartItems.length === 0) {
-        cartList.innerHTML = '<p>Your cart is empty. Please add items from the <a href="{{ url_for("home") }}">store</a>.</p>';
-        return;
-      }
-
-      let subtotal = 0;
-
-      cartItems.forEach((item, index) => {
-        const itemTotal = item.price * item.quantity;
-        subtotal += itemTotal;
-
-        const li = document.createElement('li');
-        li.className = 'cart-item-payment';
-        li.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" style="width: 70px; height: 70px;">
-          <span>${item.name} × ${item.quantity} = ₹${itemTotal}</span>
-          <button onclick="removeItem(${index})">Delete</button>
-        `;
-        cartList.appendChild(li);
-      });
-
-      const gst = subtotal * 0.12;
-      const delivery = subtotal * 0.08;
-      const total = subtotal + gst + delivery;
-
-      priceSummary.innerHTML = `
-        <div class="price-summary-row"><span>Subtotal:</span><span>₹${subtotal.toFixed(2)}</span></div>
-        <div class="price-summary-row"><span>GST (12%):</span><span>₹${gst.toFixed(2)}</span></div>
-        <div class="price-summary-row"><span>Delivery (8%):</span><span>₹${delivery.toFixed(2)}</span></div>
-        <div class="price-summary-row total"><span>Total:</span><span>₹${total.toFixed(2)}</span></div>
-      `;
-
-      document.getElementById('place-order-btn').addEventListener('click', async () => {
-        const name = document.getElementById('customer-name').value;
-        const phone = document.getElementById('customer-phone').value;
-        const address = document.getElementById('delivery-address').value;
-
-        if (!name || !phone || !address) {
-          showToast('Please fill in all customer details.', 'error');
-          return;
-        }
-
-        const orderData = {
-          name,
-          phone,
-          address,
-          cartItems
-        };
-
-        try {
-          const response = await fetch('/submit_order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            showToast(result.message, 'success');
-            localStorage.removeItem('cart');
-            setTimeout(() => window.location.href = '{{ url_for("home") }}', 2000);
-          } else {
-            showToast(result.message, 'error');
-          }
-        } catch (error) {
-          showToast('An error occurred. Please try again.', 'error');
-        }
-      });
-
-      function showToast(message, type) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.className = `show ${type}`;
-        setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
-      }
-    });
-
-    function removeItem(index) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      window.location.reload();
-    }
-  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
