@@ -108,8 +108,8 @@ def submit_order():
 
         item_total = price * item.get('quantity', 1)
         total_price += item_total
-        email_body += f"- {item['name']} (Quantity: {item.get('quantity', 1)}) = ₹{item_total}
-"
+     email_body += f"- {item['name']} (Quantity: {item.get('quantity', 1)}) = ₹{item_total}\\n"
+
 
     email_body += f"
 Total Amount: ₹{total_price}
