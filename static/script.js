@@ -145,6 +145,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+function getPrice(itemName) {
+  switch (itemName) {
+    case "Milk":
+      return 90;
+    case "Curd":
+      return 70;
+    case "Ghee":
+      return 500;
+    case "Monthly Milk Package":
+      return 3000; // Fixed price with no tax
+    default:
+      return 0;
+  }
+}
+
+function updateCartCount() {
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCountElem = document.getElementById("cart-count");
+  if (cartCountElem) {
+    cartCountElem.textContent = totalItems;
+  }
+}
+
 function addToCart(itemName, itemImage) {
   const price = getPrice(itemName);
   let item = cart.find(p => p.name === itemName);
@@ -167,5 +190,4 @@ function addToCart(itemName, itemImage) {
       cartIcon.classList.remove('cart-icon-bounce');
     }, 500); // Match animation duration
   }
-}
 }
