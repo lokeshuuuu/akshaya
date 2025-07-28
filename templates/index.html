@@ -26,69 +26,13 @@
     <nav>
       <h2 class="brand">🐄 <span>Green Pastures Dairy</span></h2>
       <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#products">Products</a></li>
-        <li><a href="#contact">Contact</a></li>
         <li><button onclick="window.location.href='{{ url_for('payment') }}'"><i class="fas fa-shopping-cart"></i>&nbsp;Cart (<span id="cart-count">0</span>)</button></li>
-        <li>
-          <input type="checkbox" id="dark-mode-toggle">
-          <label for="dark-mode-toggle" class="toggle-label">Toggle Dark Mode</label>
-        </li>
       </ul>
     </nav>
   </header>
 
-  <section class="hero">
-    <div class="hero-img">
-      <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/cow-2027621_1280.png" alt="Cow in green field">
-    </div>
-    <div class="hero-content">
-      <div class="hero-title">Fresh Dairy from Green Pastures</div>
-      <div class="hero-desc">Experience the purity of nature with our farm-fresh milk and dairy products, delivered straight from lush green fields to your doorstep.</div>
-      <div style="display:flex;align-items:center;">
-        <button class="add-to-cart-btn" onclick="window.scrollTo({top: document.querySelector('.products').offsetTop, behavior: 'smooth'});">Shop Now</button>
-        <div class="hero-milk-pour"></div>
-      </div>
-    </div>
-  </section>
-
     </button>
   </nav>
-
-  <div class="products">
-    <div class="product" data-aos="fade-up">
-      <img src="{{ url_for('static', filename='milk.jpg') }}"
-           alt="Akshaya Dairy Farm Milk Bottle"
-           style="width: 100%; height: 200px; border-radius: 10px;" />
-      <h3>Milk(1L)<br> ₹90</h3>
-      <button onclick="addToCart('Milk', '{{ url_for('static', filename='milk.jpg') }}')">Add to Cart</button>
-    </div>
-
-    <div class="product">
-      <img src="{{ url_for('static', filename='curd.png') }}" data-aos="fade-up"
-           alt="Akshaya Dairy Farm Curd Bottle"
-           style="width: 100%; height: 200px; border-radius: 10px;" />
-      <h3>Curd(1L)<br> ₹70</h3>
-      <button onclick="addToCart('Curd', '{{ url_for('static', filename='curd.png') }}')">Add to Cart</button>
-    </div>
-
-    <div class="product">
-      <img src="{{ url_for('static', filename='ghee.png') }}" data-aos="fade-up"
-           alt="Akshaya Dairy Farm Ghee"
-           style="width: 100%; height: 200px; border-radius: 10px;" />
-      <h3>Ghee(500g)<br> ₹500</h3>
-      <button onclick="addToCart('Ghee', '{{ url_for('static', filename='ghee.png') }}')">Add to Cart</button>
-    </div>
-
-    <div class="product">
-      <img src="{{ url_for('static', filename='milk.jpg') }}" data-aos="fade-up"
-           alt="Milk Monthly Package"
-           style="width: 100%; height: 200px; border-radius: 10px;" />
-      <h3>Milk - Monthly Package<br> ₹3000</h3>
-      <p>1L/day for 30 days - Fixed price, no tax</p>
-      <button onclick="addToCart('Monthly Milk Package', '{{ url_for('static', filename='milk.jpg') }}')">Subscribe</button>
-    </div>
-  </div>
 
   <div id="toast" class="hidden">Item added to cart</div>
 
