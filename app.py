@@ -34,8 +34,9 @@ CASHFREE_APP_ID = os.environ.get('CASHFREE_APP_ID')
 CASHFREE_SECRET_KEY = os.environ.get('CASHFREE_SECRET_KEY')
 CASHFREE_ENDPOINT = "https://sandbox.cashfree.com/pg" # Use production endpoint for production
 
-# Initialize Cashfree API Utility
-Cashfree.initialize(CASHFREE_ENDPOINT, CASHFREE_APP_ID, CASHFREE_SECRET_KEY)
+Cashfree.XClientId = CASHFREE_APP_ID
+Cashfree.XClientSecret = CASHFREE_SECRET_KEY
+Cashfree.XEnvironment = Cashfree.SANDBOX # Use Cashfree.PRODUCTION for production
 
 
 @app.route('/')
