@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # app.py (Final working version with Cashfree Integration)
 
 from flask import Flask, render_template, request, redirect, url_for, session
