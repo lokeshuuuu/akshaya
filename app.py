@@ -8,9 +8,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os
 import uuid
-from cashfree_sdk.api_utility import APIUtility
-from cashfree_sdk.exceptions.cashfree_api_exception import CashfreeApiException
-from cashfree_sdk.exceptions.api_exception import APIException
+from cashfree_pg.api_client import Cashfree
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Change this in production
@@ -37,7 +35,7 @@ CASHFREE_SECRET_KEY = os.environ.get('CASHFREE_SECRET_KEY')
 CASHFREE_ENDPOINT = "https://sandbox.cashfree.com/pg" # Use production endpoint for production
 
 # Initialize Cashfree API Utility
-APIUtility.initialize(CASHFREE_ENDPOINT, CASHFREE_APP_ID, CASHFREE_SECRET_KEY)
+Cashfree.initialize(CASHFREE_ENDPOINT, CASHFREE_APP_ID, CASHFREE_SECRET_KEY)
 
 
 @app.route('/')
