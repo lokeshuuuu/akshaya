@@ -97,15 +97,15 @@ def create_cashfree_order():
             "customer_details": customer_details,
         }
 
-        response = APIUtility.create_order(order_payload)
-        payment_session_id = response.get('payment_session_id')
+        api_response = Cashfree().PGCreateOrder("2023-08-01", order_payload, None, None)
+        payment_session_id = api_response.data.payment_session_id
 
         if payment_session_id:
             return jsonify({'payment_session_id': payment_session_id}), 200
         else:
             return jsonify({'message': 'Failed to create Cashfree order'}), 500
 
-    except (CashfreeApiException, APIException) as e:
+    except CashfreeApiException as e:
         print(f"Cashfree API error: {e}")
         return jsonify({'message': 'Cashfree API error', 'error': str(e)}), 500
     except Exception as e:

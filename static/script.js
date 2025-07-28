@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cashfreePayBtn = document.getElementById('cashfree-pay-btn'); // Get the new button
 
   if (cartItems.length === 0) {
-    cartList.innerHTML = '<p>Your cart is empty. Please add items from the <a href="{{ url_for("home") }}">store</a>.</p>';
+    cartList.innerHTML = '<p>Your cart is empty. Please add items from the <a href="{{ url_for("index") }}">store</a>.</p>';
     if (cashfreePayBtn) {
       cashfreePayBtn.disabled = true; // Disable button if cart is empty
     }
@@ -121,6 +121,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Existing helper functions ---
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.className = `show ${type || ''}`;
+    setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
+  }
+
+  function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    window.location.reload();
+  }
+
+  // Keep your existing getPrice and updateCartCount functions
+  function getPrice(itemName) {
+    switch (itemName) {
+      case "Milk":
+        return 90;
+      case "Curd":
+        return 70;
+      case "Ghee":
+        return 500;
+      case "Monthly Milk Package":
+        return 3000; // Fixed price with no tax
+      default:
+        return 0;
+    }
+  }
+
+  function updateCartCount() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartCountElem = document.getElementById("cart-count");
+    if (cartCountElem) {
+      cartCountElem.textContent = totalItems;
+    }
+  }
+});
+
+function addToCart(itemName, itemImage) {
+  const price = getPrice(itemName);
+  let item = cart.find(p => p.name === itemName);
+
+  if (item) {
+    item.quantity++;
+  } else {
+    cart.push({ name: itemName, price: price, quantity: 1, image: itemImage });
+  }
+
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
   showToast(`${itemName} added to cart`);
@@ -133,43 +184,5 @@ document.addEventListener('DOMContentLoaded', () => {
       cartIcon.classList.remove('cart-icon-bounce');
     }, 500); // Match animation duration
   }
-
-  // --- Existing helper functions ---
-  function showToast(message, type) {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
-    toast.textContent = message;
-    toast.className = `show ${type || ''}`;
-    setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
-  }
 }
-
-function removeItem(index) {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  cart.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  window.location.reload();
-
-// Keep your existing getPrice and updateCartCount functions
-function getPrice(itemName) {
-  switch (itemName) {
-    case "Milk":
-      return 90;
-    case "Curd":
-      return 70;
-    case "Ghee":
-      return 500;
-    case "Monthly Milk Package":
-      return 3000; // Fixed price with no tax
-    default:
-      return 0;
-  }
-}
-
-function updateCartCount() {
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const cartCountElem = document.getElementById("cart-count");
-  if (cartCountElem) {
-    cartCountElem.textContent = totalItems;
-  }
 }
