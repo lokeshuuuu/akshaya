@@ -77,7 +77,6 @@ def remove_from_cart(index):
 def payment():
     return render_template('payment.html')
 
-<<<<<<< HEAD
 @app.route('/checkout', methods=['GET'])
 def checkout():
     return render_template('checkout.html')
