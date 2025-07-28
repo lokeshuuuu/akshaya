@@ -1,9 +1,21 @@
+<<<<<<< HEAD
 # app.py (Final working version with Cashfree Integration)
 
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests
 import json
 from datetime import datetime
+=======
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+import smtplib
+from email.message import EmailMessage
+import os
+import uuid
+from cashfree_sdk.api_utility import APIUtility
+from cashfree_sdk.exceptions.cashfree_api_exception import CashfreeApiException
+from cashfree_sdk.exceptions.api_exception import APIException
+>>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Change this in production
@@ -22,6 +34,16 @@ PRODUCTS = [
     {"id": 3, "name": "Ghee", "price": 120, "image": "ghee.jpg"},
     {"id": 4, "name": "Paneer", "price": 150, "image": "paneer.jpg"}
 ]
+
+# Cashfree Configuration (use environment variables for production)
+# Replace with your actual API keys and endpoint
+CASHFREE_APP_ID = os.environ.get('CASHFREE_APP_ID')
+CASHFREE_SECRET_KEY = os.environ.get('CASHFREE_SECRET_KEY')
+CASHFREE_ENDPOINT = "https://sandbox.cashfree.com/pg" # Use production endpoint for production
+
+# Initialize Cashfree API Utility
+APIUtility.initialize(CASHFREE_ENDPOINT, CASHFREE_APP_ID, CASHFREE_SECRET_KEY)
+
 
 @app.route('/')
 def index():
@@ -59,9 +81,57 @@ def remove_from_cart(index):
 def payment():
     return render_template('payment.html')
 
+<<<<<<< HEAD
 @app.route('/checkout', methods=['GET'])
 def checkout():
     return render_template('checkout.html')
+=======
+@app.route('/create_cashfree_order', methods=['POST'])
+def create_cashfree_order():
+    data = request.json
+    # Extract necessary data from the request (e.g., order_amount, customer_details)
+    order_amount = data.get('order_amount')
+    customer_details = data.get('customer_details') # Assuming you send customer details from frontend
+    order_id = str(uuid.uuid4()) # Generate a unique order ID
+
+    if not all([order_amount, customer_details]):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    try:
+        # Create order payload
+        order_payload = {
+            "order_amount": order_amount,
+            "order_id": order_id,
+            "order_currency": "INR", # Or your desired currency
+            "customer_details": customer_details,
+            # Add more details as needed (e.g., order_meta, order_expiry_time)
+        }
+
+        # Call Cashfree API to create order
+        response = APIUtility.create_order(order_payload)
+        payment_session_id = response.get('payment_session_id')
+
+        if payment_session_id:
+            return jsonify({'payment_session_id': payment_session_id}), 200
+        else:
+            return jsonify({'message': 'Failed to create Cashfree order'}), 500
+
+    except (CashfreeApiException, APIException) as e:
+        print(f"Cashfree API error: {e}")
+        return jsonify({'message': 'Cashfree API error', 'error': str(e)}), 500
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return jsonify({'message': 'An unexpected error occurred'}), 500
+
+
+@app.route('/submit_order', methods=['POST'])
+def submit_order():
+    data = request.json
+    name = data.get('name')
+    phone = data.get('phone')
+    address = data.get('address')
+    cart_items = data.get('cartItems', [])
+>>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
 
 @app.route('/create-order', methods=['POST'])
 def create_order():
@@ -87,6 +157,7 @@ def create_order():
 
     order_id = f"order_{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
+<<<<<<< HEAD
     data = {
         "customer_details": {
             "customer_id": f"{email}-{datetime.now().timestamp()}",
@@ -102,6 +173,17 @@ def create_order():
     }
 
     response = requests.post(CASHFREE_BASE_URL, headers=headers, data=json.dumps(data))
+=======
+        item_total = price * item.get('quantity', 1)
+        total_price += item_total
+        email_body += f"- {item['name']} (Quantity: {item.get('quantity', 1)}) = ₹{item_total}
+"
+
+
+    email_body += f"
+Total Amount: ₹{total_price}
+"
+>>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
 
     if response.status_code == 200:
         result = response.json()
