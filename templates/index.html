@@ -3,6 +3,11 @@
 <head>
   <title>Akshaya Milk Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts - Poppins, Quicksand, Open Sans, Lato -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;600;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
   <!-- Correct local stylesheet using Flask's url_for -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -15,9 +20,27 @@
 <body>
 
   <nav>
-    <h2 class="brand">🧺 AKSHAYA Dairy Product</h2>
-    <button onclick="window.location.href='{{ url_for('payment') }}'">
+    <h2 class="brand">🐄 <span>Green Pastures Dairy</span>
+    </h2>
+    <button onclick="window.location.href='{{ url_for('view_cart') }}'" class="add-to-cart-btn">
       <i class="fas fa-shopping-cart"></i>&nbsp;Cart (<span id="cart-count">0</span>)
+    </button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-img">
+      <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/cow-2027621_1280.png" alt="Cow in green field">
+    </div>
+    <div class="hero-content">
+      <div class="hero-title">Fresh Dairy from Green Pastures</div>
+      <div class="hero-desc">Experience the purity of nature with our farm-fresh milk and dairy products, delivered straight from lush green fields to your doorstep.</div>
+      <div style="display:flex;align-items:center;">
+        <button class="add-to-cart-btn" onclick="window.scrollTo({top: document.querySelector('.products').offsetTop, behavior: 'smooth'});">Shop Now</button>
+        <div class="hero-milk-pour"></div>
+      </div>
+    </div>
+  </section>
+
     </button>
   </nav>
 
@@ -50,8 +73,8 @@
       <img src="{{ url_for('static', filename='milk.jpg') }}"
            alt="Milk Monthly Package"
            style="width: 100%; height: 200px; border-radius: 10px;" />
-      <h3>Milk - Monthly Package</h3>
-      <p>1L/day for 30 days</p>
+      <h3>Milk - Monthly Package<br> ₹3000</h3>
+      <p>1L/day for 30 days - Fixed price, no tax</p>
       <button onclick="addToCart('Monthly Milk Package', '{{ url_for('static', filename='milk.jpg') }}')">Subscribe</button>
     </div>
   </div>

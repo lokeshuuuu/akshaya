@@ -22,6 +22,15 @@ function addToCart(itemName, itemImage) {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
   showToast(`${itemName} added to cart`);
+
+  // Add bounce animation to cart icon
+  const cartIcon = document.querySelector('.fa-shopping-cart');
+  if (cartIcon) {
+    cartIcon.classList.add('cart-icon-bounce');
+    setTimeout(() => {
+      cartIcon.classList.remove('cart-icon-bounce');
+    }, 500); // Match animation duration
+  }
 }
 
 function getPrice(itemName) {
@@ -33,7 +42,7 @@ function getPrice(itemName) {
     case "Ghee":
       return 500;
     case "Monthly Milk Package":
-      return 2900;
+      return 3000; // Fixed price with no tax
     default:
       return 0;
   }

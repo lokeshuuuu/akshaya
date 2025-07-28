@@ -1,82 +1,118 @@
-from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
-import smtplib
-from email.message import EmailMessage
-import os
+# app.py (Final working version with Cashfree Integration)
+
+from flask import Flask, render_template, request, redirect, url_for, session
+import requests
+import json
+from datetime import datetime
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+app.secret_key = 'your-secret-key'  # Change this in production
 
-# Email configuration
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'lokesh154721@gmail.com')
-SENDER_PASSWORD = os.environ.get('SENDER_PASSWORD', 'honw bbzy eqxc cfin ')  # Use Gmail App Password
-RECEIVER_EMAIL = os.environ.get('RECEIVER_EMAIL', 'lokesh154721@gmail.com')
+# Replace these with your actual Cashfree Sandbox credentials
+import os
+
+CASHFREE_APP_ID = os.environ.get('CASHFREE_APP_ID', 'your_sandbox_app_id')
+CASHFREE_SECRET_KEY = os.environ.get('CASHFREE_SECRET_KEY', 'your_sandbox_secret_key')
+CASHFREE_BASE_URL = 'https://sandbox.cashfree.com/pg/orders'
+
+# Sample product catalog
+PRODUCTS = [
+    {"id": 1, "name": "Milk", "price": 30, "image": "milk.jpg"},
+    {"id": 2, "name": "Curd", "price": 40, "image": "curd.jpg"},
+    {"id": 3, "name": "Ghee", "price": 120, "image": "ghee.jpg"},
+    {"id": 4, "name": "Paneer", "price": 150, "image": "paneer.jpg"}
+]
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def index():
+    return render_template('index.html', products=PRODUCTS)
 
-@app.route('/payment')
+@app.route('/add-to-cart/<int:product_id>')
+def add_to_cart(product_id):
+    product = next((p for p in PRODUCTS if p['id'] == product_id), None)
+    if not product:
+        return "Product not found", 404
+
+    cart = session.get('cart', [])
+    cart.append(product)
+    session['cart'] = cart
+    return redirect(url_for('view_cart'))
+
+@app.route('/cart')
+def view_cart():
+    cart = session.get('cart', [])
+    subtotal = sum(item['price'] for item in cart)
+    gst = subtotal * 0.12
+    delivery = subtotal * 0.08
+    total = subtotal + gst + delivery
+    return render_template('cart.html', cart=cart, subtotal=subtotal, gst=gst, delivery=delivery, total=total)
+
+@app.route('/remove-from-cart/<int:index>')
+def remove_from_cart(index):
+    cart = session.get('cart', [])
+    if 0 <= index < len(cart):
+        cart.pop(index)
+        session['cart'] = cart
+    return redirect(url_for('view_cart'))
+
+@app.route('/payment', methods=['GET'])
 def payment():
     return render_template('payment.html')
 
-@app.route('/submit_order', methods=['POST'])
-def submit_order():
-    data = request.json
-    name = data.get('name')
-    phone = data.get('phone')
-    address = data.get('address')
-    cart_items = data.get('cartItems', [])
+@app.route('/checkout', methods=['GET'])
+def checkout():
+    return render_template('checkout.html')
 
-    if not all([name, phone, address, cart_items]):
-        return jsonify({'message': 'Missing required fields'}), 400
+@app.route('/create-order', methods=['POST'])
+def create_order():
+    cart = session.get('cart', [])
+    if not cart:
+        return redirect(url_for('index'))
 
-    email_body = f"""
-    New Order Received!
+    email = request.form.get('email')
+    phone = request.form.get('phone')
 
-    Customer Details:
-    Name: {name}
-    Phone: {phone}
-    Address: {address}
+    subtotal = sum(item['price'] for item in cart)
+    gst = subtotal * 0.12
+    delivery = subtotal * 0.08
+    total_amount = round(subtotal + gst + delivery, 2)
 
-    Cart Items:
-    """
+    headers = {
+        "accept": "application/json",
+        "x-api-version": "2022-09-01",
+        "content-type": "application/json",
+        "x-client-id": CASHFREE_APP_ID,
+        "x-client-secret": CASHFREE_SECRET_KEY,
+    }
 
-    total_price = 0
-    for item in cart_items:
-        price = 0
-        if item['name'] == 'Milk':
-            price = 90
-        elif item['name'] == 'Curd':
-            price = 70
-        elif item['name'] == 'Ghee':
-            price = 500
-        elif item['name'] == 'Monthly Milk Package':
-            price = 2900
+    order_id = f"order_{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
-        item_total = price * item.get('quantity', 1)
-        total_price += item_total
-        email_body += f"- {item['name']} (Quantity: {item.get('quantity', 1)}) = ₹{item_total}\n"
+    data = {
+        "customer_details": {
+            "customer_id": f"{email}-{datetime.now().timestamp()}",
+            "customer_email": email,
+            "customer_phone": phone
+        },
+        "order_amount": total_amount,
+        "order_currency": "INR",
+        "order_id": order_id,
+        "order_meta": {
+            "return_url": f"{request.url_root}payment_response?order_id={order_id}"
+        }
+    }
 
-    email_body += f"\nTotal Amount: ₹{total_price}\n"
+    response = requests.post(CASHFREE_BASE_URL, headers=headers, data=json.dumps(data))
 
-    # Send email
-    msg = EmailMessage()
-    msg.set_content(email_body)
-    msg['Subject'] = 'New Order - Akshaya'
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECEIVER_EMAIL
+    if response.status_code == 200:
+        result = response.json()
+        payment_link = result.get("payment_link")
+        return render_template("payment.html", payment_link=payment_link)
+    else:
+        return f"Payment failed: {response.text}", 500
 
-    try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login(SENDER_EMAIL, SENDER_PASSWORD)
-            smtp.send_message(msg)
-        return jsonify({'message': 'Order submitted successfully and email sent!'}), 200
-    except Exception as e:
-        print(f"Email sending failed: {e}")
-        return jsonify({'message': 'Failed to send order email'}), 500
+@app.route('/payment_response')
+def payment_response():
+    return "Thank you for your payment! You will receive confirmation shortly."
 
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
