@@ -36,6 +36,22 @@
 
   <div id="toast" class="hidden">Item added to cart</div>
 
+  <section class="products-section">
+    <div class="container">
+      <h2>Our Products</h2>
+      <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+          <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+          <h3>{{ product.name }}</h3>
+          <p>₹{{ product.price }}</p>
+          <button onclick="addToCart('{{ product.name }}', '{{ url_for('static', filename=product.image) }}')">Add to Cart</button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
   <!-- Script must be loaded from static -->
   <script>
     window.onload = function () {
