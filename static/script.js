@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-<<<<<<< HEAD
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
   showToast(`${itemName} added to cart`);
@@ -134,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cartIcon.classList.remove('cart-icon-bounce');
     }, 500); // Match animation duration
   }
-=======
+
   // --- Existing helper functions ---
   function showToast(message, type) {
     const toast = document.getElementById('toast');
@@ -143,15 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.className = `show ${type || ''}`;
     setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
   }
-});
+}
 
 function removeItem(index) {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   cart.splice(index, 1);
   localStorage.setItem('cart', JSON.stringify(cart));
   window.location.reload();
->>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
-}
 
 // Keep your existing getPrice and updateCartCount functions
 function getPrice(itemName) {

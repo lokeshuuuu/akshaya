@@ -1,8 +1,5 @@
 Flask
 Flask-Cors
 gunicorn
-<<<<<<< HEAD
 requests
-=======
 cashfree_sdk
->>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64

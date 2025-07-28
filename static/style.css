@@ -5,6 +5,12 @@ body {
   margin: 0;
 <<<<<<< HEAD
   color: #3E3E3E; /* Charcoal */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+  background: #1e1e1e;
+  color: #f9f9f9;
 }
 
 h1, h2, h3, h4, h5, h6, .brand {
@@ -64,14 +70,6 @@ section.hero {
   height: 60px;
   background: url('https://cdn.pixabay.com/photo/2017/01/31/13/14/milk-2027622_1280.png') no-repeat center/contain;
   margin-left: 12px;
-=======
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark-mode {
-  background: #1e1e1e;
-  color: #f9f9f9;
->>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
 }
 
 
@@ -79,27 +77,20 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
-  background: #FFFFFF;
-  padding: 18px 28px;
-  border-radius: 18px;
-  position: sticky;
-=======
   background: rgba(240, 240, 240, 0.9); /* Slightly transparent background */
   padding: 15px 20px;
   border-radius: 10px;
   position: fixed; /* Changed to fixed for a true sticky effect */
->>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
   top: 0;
   width: 100%; /* Make it span the full width */
   box-sizing: border-box; /* Include padding in width */
   z-index: 100;
-<<<<<<< HEAD
   box-shadow: 0 4px 24px rgba(109,190,69,0.10);
   border-bottom: 3px solid #6DBE45;
   background-image: linear-gradient(to right, #FFFFFF, #F6FFF4);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(5px); /* Add blur for glassmorphism effect */
 }
 
 nav::before {
@@ -113,9 +104,6 @@ nav::before {
   border-radius: 50%;
   z-index: -1;
   opacity: 0.8;
-=======
-  backdrop-filter: blur(5px); /* Add blur for glassmorphism effect */
->>>>>>> 0df262c0ce595e1707a6c09b2a39bad976ad4a64
 }
 
 body.dark-mode nav {
@@ -189,9 +177,9 @@ body.dark-mode .brand {
   border: none;
   padding: 22px 16px 18px 16px;
   text-align: center;
-  border-radius: 22px;
+  border-radius: 10px;
   transition: box-shadow 0.3s, background 0.3s;
-  background: #FFFFFF;
+  background: white;
   box-shadow: 0 4px 24px rgba(109,190,69,0.07);
   margin-bottom: 8px;
   position: relative;
